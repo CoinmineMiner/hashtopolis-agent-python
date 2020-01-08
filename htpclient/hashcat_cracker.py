@@ -67,6 +67,7 @@ class HashcatCracker:
         self.last_update = 0
         self.uses_slow_hash_flag = False
         self.wasStopped = False
+        self.start_time = time.time()
 
     def build_command(self, task, chunk):
         args = " --machine-readable --quiet --status --restore-disable --session=hashtopolis"
@@ -247,6 +248,7 @@ class HashcatCracker:
         logging.info("finished chunk")
 
     def run_loop(self, proc, chunk, task):
+
         self.cracks = []
         piping_threshold = 95
         enable_piping = True
@@ -448,19 +450,21 @@ class HashcatCracker:
                                     + " Zaps: "
                                     + str(len(zaps))
                                 )
-                                requests.put(
-                                    "{}/stats".format(self.api_url),
-                                    json={
-                                        "progress_in_percent": float(
-                                            progress_in_percent
-                                        ),
-                                        "speed": float(speed),
-                                        "cracks": int(cracks_count),
-                                        "accepted": int(ans["cracked"]),
-                                        "skips": int(ans["skipped"]),
-                                        "zaps": int(len(zaps)),
-                                    },
-                                )
+
+                            requests.put(
+                                "{}/stats".format(self.api_url),
+                                json={
+                                    "progress_in_percent": float(progress_in_percent),
+                                    "speed": float(speed),
+                                    "cracks": int(cracks_count),
+                                    "accepted": int(ans["cracked"]),
+                                    "skips": int(ans["skipped"]),
+                                    "zaps": int(len(zaps)),
+                                    "uptime_in_seconds": int(
+                                        time.time() - self.start_time
+                                    ),
+                                },
+                            )
                             self.lock.release()
                     else:
                         # hacky solution to exclude warnings from hashcat

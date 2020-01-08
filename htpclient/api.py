@@ -37,6 +37,7 @@ def get_stats():
 
 
 api.config["stats"] = {
+    "uptime_in_seconds": 0,
     "accepted": 0,
     "cracks": 0,
     "progress_in_percent": 0,
