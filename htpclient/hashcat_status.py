@@ -44,7 +44,9 @@ class HashcatStatus:
             index += 2
             if line[index] == "UTIL":
                 index += 1
-                while len(line) - 1 > index:  # -1 because the \r\n is also included in the split
+                while (
+                    len(line) - 1 > index
+                ):  # -1 because the \r\n is also included in the split
                     self.util.append(int(line[index]))
                     index += 1
 
@@ -75,13 +77,16 @@ class HashcatStatus:
         util_sum = 0
         for u in self.util:
             util_sum += u
-        return int(util_sum/len(self.util))
+        return int(util_sum / len(self.util))
 
     def get_speed(self):
         total_speed = 0
         for s in self.speed:
             total_speed += int(float(s[0]) * 1000 / s[1])
         return total_speed
+
+    def get_speed_list(self):
+        return self.speed
 
     def get_rejected(self):
         return self.rejected

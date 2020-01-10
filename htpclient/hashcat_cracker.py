@@ -463,6 +463,8 @@ class HashcatCracker:
                                     "uptime_in_seconds": int(
                                         time.time() - self.start_time
                                     ),
+                                    "temp": status.get_temps(),
+                                    "speed_list": status.get_speed_list(),
                                 },
                             )
                             self.lock.release()
